@@ -1,16 +1,16 @@
 {
   "name": "calc-flow",
   "version": "1.0.0",
-  "description": "",
+  "description": "Calculation Tree Logic App",
   "main": "index.js",
   "scripts": {
-    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "postinstall": "cd server && npm install && cd ../client && npm install",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
-  "author": "",
+  "author": "Asher Azriel Ginting",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^9.2.1"
