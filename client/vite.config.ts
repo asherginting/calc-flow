@@ -6,5 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+  },
+  preview: {
+    port: 4173, // Port standar Vite Preview
+    host: true, // PENTING: Biar bisa diakses dari luar container Docker
   }
 })

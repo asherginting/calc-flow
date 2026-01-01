@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum NodeType {
+  INPUT    
+  ADD
+  SUBTRACT
+  MULTIPLY
+  DIVIDE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String  
+  username  String
+  createdAt DateTime @default(now())
+  projects  Project[]
+  nodes     Node[] 
+}
+
+model Project {
+  id        String   @id @default(uuid())
+  startingValue Float  @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authorId  String?  
+  author    User?    @relation(fields: [authorId], references: [id])
+  nodes     Node[]
+}
+
+model Node {
+  id        String   @id @default(uuid())
+  type      NodeType 
+  value     Float    @default(0)
+  x         Float    @default(0)
+  y         Float    @default(0)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
+  parentId  String?
+  parent    Node?    @relation("NodeHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Node[]   @relation("NodeHierarchy")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([projectId])
+  @@index([parentId])
+}
